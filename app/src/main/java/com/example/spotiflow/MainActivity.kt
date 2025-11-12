@@ -18,42 +18,32 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private lateinit var navController: NavHostController // 2. Mude para lateinit
+    private lateinit var navController: NavHostController 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             SpotiflowTheme {
-                navController = rememberNavController() // 3. Inicialize aqui
+                navController = rememberNavController() 
                 SpotiflowApp(navController = navController)
             }
         }
 
-        // 4. LIDE COM O DEEP LINK NO ONCREATE (Para apps recriados)
         handleDeepLink(intent)
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        // 5. LIDE COM O DEEP LINK NO ONNEWINTENT (Para apps pausados)
         handleDeepLink(intent)
     }
 
-    /**
-     * Função centralizada para entregar o deep link ao NavHost.
-     */
     private fun handleDeepLink(intent: Intent?) {
         if (intent != null && intent.action == Intent.ACTION_VIEW) {
             Log.d("MainActivity", "Recebendo Deep Link: ${intent.data}")
-            // 6. Verifique se o navController já foi inicializado
+            
             if (::navController.isInitialized) {
                 navController.handleDeepLink(intent)
-            } else {
-                // Isso pode acontecer se o setContent ainda não rodou.
-                // O NavHost em SpotiflowApp.kt vai pegar o intent da activity
-                // quando ele for criado.
-                Log.w("MainActivity", "NavController ainda não inicializado para handleDeepLink.")
             }
         }
     }
