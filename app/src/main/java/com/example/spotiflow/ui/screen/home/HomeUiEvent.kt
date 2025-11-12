@@ -19,6 +19,7 @@ sealed interface HomeUiEvent {
     data object Refresh : HomeUiEvent
     data class ChangeTimeRange(val timeRange: TopTimeRange) : HomeUiEvent
     data class PlayTrack(val trackUri: String) : HomeUiEvent
-    data object LoadFeaturedCategories: HomeUiEvent
+    data object LoadFeaturedCategories : HomeUiEvent
     data object LoadMoreCategories : HomeUiEvent
+    data object LoadReleases : HomeUiEvent
 }
