@@ -6,6 +6,7 @@ import com.example.spotiflow.data.manager.TokenManager
 import com.example.spotiflow.data.remote.dto.CategoriesResponse
 import com.example.spotiflow.data.remote.dto.FeaturedPlaylistsResponse
 import com.example.spotiflow.data.remote.dto.FollowedArtistsResponse
+import com.example.spotiflow.data.remote.dto.NewReleasesResponse
 import com.example.spotiflow.data.remote.dto.PlaylistsResponse
 import com.example.spotiflow.data.remote.dto.RecentlyPlayedResponse
 import com.example.spotiflow.data.remote.dto.RecommendationsResponse
@@ -107,5 +108,12 @@ class ProfileRepository @Inject constructor(
             parameter("limit", limit)
             parameter("offset", offset)
         }.body<CategoriesResponse>()
+    }
+
+    suspend fun getNewReleases(): NewReleasesResponse {
+        return httpClient.get("$BASE_URL/browse/new-releases") {
+            parameter("market", "BR")
+            parameter("limit", 20)
+        }.body<NewReleasesResponse>()
     }
 }
