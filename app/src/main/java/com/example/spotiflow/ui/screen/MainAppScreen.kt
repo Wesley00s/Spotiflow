@@ -3,8 +3,10 @@ package com.example.spotiflow.ui.screen
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,8 +17,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.spotiflow.Greeting
 import com.example.spotiflow.ui.navigation.AppDestinations
-import com.example.spotiflow.ui.screen.home.HomeScreen
 import com.example.spotiflow.ui.screen.home.HomeScreenRoute
+
 
 @Composable
 fun MainAppScreen() {
@@ -45,7 +47,10 @@ fun MainAppScreen() {
                     }
                 )
             }
-        }
+        },
+        navigationSuiteColors = NavigationSuiteDefaults.colors(
+            navigationBarContainerColor = MaterialTheme.colorScheme.background
+        )
     ) {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
             NavHost(
@@ -56,10 +61,10 @@ fun MainAppScreen() {
                 composable(AppDestinations.HOME.name) {
                     HomeScreenRoute()
                 }
-                composable(AppDestinations.FAVORITES.name) {
+                composable(AppDestinations.SEARCH.name) {
                     Greeting(name = "Favorites")
                 }
-                composable(AppDestinations.PROFILE.name) {
+                composable(AppDestinations.LIBRARY.name) {
                     Greeting(name = "Profile")
                 }
             }
