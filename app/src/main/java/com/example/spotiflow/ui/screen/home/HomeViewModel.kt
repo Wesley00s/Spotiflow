@@ -3,7 +3,7 @@ package com.example.spotiflow.ui.screen.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spotiflow.data.manager.TokenManager
+import com.example.spotiflow.data.model.UiAlbum
 import com.example.spotiflow.data.model.UiArtist
 import com.example.spotiflow.data.model.UiCategory
 import com.example.spotiflow.data.model.UiPlaylist
@@ -11,13 +11,12 @@ import com.example.spotiflow.data.model.UiTrack
 import com.example.spotiflow.data.model.UiUserProfile
 import com.example.spotiflow.data.repository.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -57,10 +56,10 @@ class HomeViewModel @Inject constructor(
 
                 is HomeUiEvent.PlayTrack -> {
                     Log.d("HomeViewModel", "Tocar música: ${event.trackUri}")
-                    // TODO: Implementar lógica de player
+                    
                 }
 
-
+                HomeUiEvent.LoadReleases -> loadReleases()
             }
         }
     }
@@ -340,6 +339,30 @@ class HomeViewModel @Inject constructor(
                     isCategoriesLoadingNextPage = false,
                     error = "Falha ao carregar Categorias"
                 )
+            }
+        }
+    }
+
+    private suspend fun loadReleases() {
+        try {
+            val releasesDto = profileRepository.getNewReleases()
+
+            val releasesUi = releasesDto.albums.items.map { albumDto ->
+                UiAlbum(
+                    id = albumDto.id,
+                    name = albumDto.name,
+                    artistName = albumDto.artists.joinToString(", ") { it.name },
+                    imageUrl = albumDto.images.firstOrNull()?.url
+                )
+            }
+
+            _uiState.update { currentUiState ->
+                currentUiState.copy(newReleases = releasesUi)
+            }
+        } catch (e: Exception) {
+            Log.e("HomeViewModel", "Falha ao carregar New Releases", e)
+            _uiState.update { currentUiState ->
+                currentUiState.copy(error = "Falha ao carregar Lançamentos")
             }
         }
     }
