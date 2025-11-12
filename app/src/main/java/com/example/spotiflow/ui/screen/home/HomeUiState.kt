@@ -1,5 +1,6 @@
 package com.example.spotiflow.ui.screen.home
 
+import com.example.spotiflow.data.model.UiAlbum
 import com.example.spotiflow.data.model.UiArtist
 import com.example.spotiflow.data.model.UiCategory
 import com.example.spotiflow.data.model.UiPlaylist
@@ -23,5 +24,6 @@ data class HomeUiState(
     val featuredCategories: List<UiCategory> = emptyList(),
     val isCategoriesLoadingNextPage: Boolean = false,
     val categoriesCurrentPage: Int = 0,
-    val canLoadMoreCategories: Boolean = true
+    val canLoadMoreCategories: Boolean = true,
+    val newReleases: List<UiAlbum> = emptyList()
 )
